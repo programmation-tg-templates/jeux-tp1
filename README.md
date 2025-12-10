@@ -55,7 +55,7 @@ npm test
 Pour voir les résultats des tests en temps réel pendant que vous codez :
 
 ```bash
-npm run test:watch
+npm run watch
 ```
 
 Les résultats des tests s'affichent également dans l'interface web du jeu !
@@ -69,9 +69,11 @@ Le plateau de jeu est représenté par un **tableau 1D**, même si visuellement 
 ### Conversion coordonnées ↔ indices
 
 Pour passer d'une position (x, y) à un indice dans le tableau :
+
 - **Formule** : `indice = y * largeur + x`
 
 Pour passer d'un indice à une position (x, y) :
+
 - **Formule** : `x = indice % largeur` et `y = Math.floor(indice / largeur)`
 
 ## Fonctions à implémenter
@@ -112,13 +114,13 @@ Toutes les fonctions sont dans le fichier [src/index.ts](src/index.ts). Elles so
 
 ### Aide-mémoire : Tableaux 1D
 
-| Opération | Code | Exemple |
-|-----------|------|---------|
-| Créer tableau vide | `new Array(taille)` | `new Array(25)` |
-| Remplir tableau | `.fill(valeur)` | `new Array(25).fill("libre")` |
-| Accéder à un élément | `tableau[indice]` | `cases[12]` |
-| Modifier un élément | `tableau[indice] = valeur` | `cases[12] = "bloqué"` |
-| Taille du tableau | `tableau.length` | `cases.length` |
+| Opération            | Code                       | Exemple                       |
+| -------------------- | -------------------------- | ----------------------------- |
+| Créer tableau vide   | `new Array(taille)`        | `new Array(25)`               |
+| Remplir tableau      | `.fill(valeur)`            | `new Array(25).fill("libre")` |
+| Accéder à un élément | `tableau[indice]`          | `cases[12]`                   |
+| Modifier un élément  | `tableau[indice] = valeur` | `cases[12] = "bloqué"`        |
+| Taille du tableau    | `tableau.length`           | `cases.length`                |
 
 ## Structure du projet
 
@@ -149,7 +151,7 @@ jeux-tp1-labyrinthe/
 
 2. **Utilisez les formules données** : Les formules de conversion sont dans les commentaires JSDoc des fonctions.
 
-3. **Testez au fur et à mesure** : Lancez `npm run test:watch` et implémentez fonction par fonction.
+3. **Testez au fur et à mesure** : Lancez `npm run watch` et implémentez fonction par fonction.
 
 4. **Visualisez dans le navigateur** : Utilisez `npm run dev` pour voir le jeu en action et déboguer visuellement.
 

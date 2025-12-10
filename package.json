@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "test": "vitest run",
-    "test:watch": "vitest --reporter=verbose --reporter=json --outputFile=public/test-results.json"
+    "watch": "vitest --reporter=verbose --reporter=json --outputFile=public/test-results.json"
   },
   "devDependencies": {
     "@types/node": "^24.10.2",
