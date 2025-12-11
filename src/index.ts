@@ -32,9 +32,17 @@ export function creerPlateau(
   largeur: number,
   hauteur: number,
   depart: Position,
-  cible: Position
+  cible: Position,
 ): PlateauDeJeu {
-  throw new Error("À implémenter");
+  const nombreCases = largeur * hauteur;
+  const cases: EtatCase[] = new Array(nombreCases).fill("libre");
+  return {
+    largeur,
+    hauteur,
+    cases,
+    depart,
+    cible,
+  };
 }
 
 /**
@@ -45,8 +53,11 @@ export function creerPlateau(
  * @returns Indice correspondant dans le tableau 1D
  * @example positionVersIndice({x: 2, y: 3}, 5) // retourne 17
  */
-export function positionVersIndice(position: Position, largeur: number): number {
-  throw new Error("À implémenter");
+export function positionVersIndice(
+  position: Position,
+  largeur: number,
+): number {
+  return position.y * largeur + position.x;
 }
 
 /**
@@ -58,12 +69,28 @@ export function positionVersIndice(position: Position, largeur: number): number 
  * @example indiceVersPosition(17, 5) // retourne {x: 2, y: 3}
  */
 export function indiceVersPosition(indice: number, largeur: number): Position {
-  throw new Error("À implémenter");
+  const x = indice % largeur;
+  const y = Math.floor(indice / largeur);
+  return { x, y };
 }
 
 // ============================================================================
 // Niveau 2 : Logique de déplacement (40-50 min)
 // ============================================================================
+
+function getCase(position: Position, plateau: PlateauDeJeu): EtatCase {
+  const indice = positionVersIndice(position, plateau.largeur);
+  return plateau.cases[indice];
+}
+
+function isWithinBounds(position: Position, plateau: PlateauDeJeu): boolean {
+  return (
+    position.x >= 0 &&
+    position.x < plateau.largeur &&
+    position.y >= 0 &&
+    position.y < plateau.hauteur
+  );
+}
 
 /**
  * Vérifie si une position est valide (dans les limites et case libre).
@@ -72,7 +99,31 @@ export function indiceVersPosition(indice: number, largeur: number): Position {
  * @returns true si la position est valide, false sinon
  */
 export function estValide(position: Position, plateau: PlateauDeJeu): boolean {
-  throw new Error("À implémenter");
+  return (
+    isWithinBounds(position, plateau) && getCase(position, plateau) === "libre"
+  );
+}
+
+function getNewPosition(
+  positionActuelle: Position,
+  direction: Direction,
+): Position {
+  const nouvellePosition = { ...positionActuelle };
+  switch (direction) {
+    case "haut":
+      nouvellePosition.y--;
+      break;
+    case "bas":
+      nouvellePosition.y++;
+      break;
+    case "gauche":
+      nouvellePosition.x--;
+      break;
+    case "droite":
+      nouvellePosition.x++;
+      break;
+  }
+  return nouvellePosition;
 }
 
 /**
@@ -85,9 +136,14 @@ export function estValide(position: Position, plateau: PlateauDeJeu): boolean {
 export function deplacerPersonnage(
   positionActuelle: Position,
   direction: Direction,
-  plateau: PlateauDeJeu
+  plateau: PlateauDeJeu,
 ): Position | null {
-  throw new Error("À implémenter");
+  const positionCandidate = getNewPosition(positionActuelle, direction);
+  if (estValide(positionCandidate, plateau)) {
+    return positionCandidate;
+  } else {
+    return null;
+  }
 }
 
 // ============================================================================
@@ -101,8 +157,11 @@ export function deplacerPersonnage(
  * @param tempsSecondes - Temps écoulé en secondes
  * @returns Score calculé
  */
-export function calculerScore(nombreMouvements: number, tempsSecondes: number): number {
-  throw new Error("À implémenter");
+export function calculerScore(
+  nombreMouvements: number,
+  tempsSecondes: number,
+): number {
+  return nombreMouvements + tempsSecondes;
 }
 
 // ============================================================================
@@ -116,6 +175,40 @@ export function calculerScore(nombreMouvements: number, tempsSecondes: number): 
  * @param plateau - Plateau de jeu
  * @returns Nombre de cases accessibles
  */
-export function compterCasesAccessibles(depart: Position, plateau: PlateauDeJeu): number {
-  throw new Error("À implémenter");
+export function compterCasesAccessibles(
+  depart: Position,
+  plateau: PlateauDeJeu,
+): number {
+  let nombreCasesAccessibles = 0;
+  const positionsAExplorer: Position[] = [depart];
+  const positionsExplorees: Position[] = [];
+
+  while (positionsAExplorer.length > 0) {
+    const positionCourante = positionsAExplorer.shift()!;
+    positionsExplorees.push(positionCourante);
+    nombreCasesAccessibles++;
+    const positionCandidates: Position[] = [
+      getNewPosition(positionCourante, "haut"),
+      getNewPosition(positionCourante, "bas"),
+      getNewPosition(positionCourante, "gauche"),
+      getNewPosition(positionCourante, "droite"),
+    ];
+    const nouvellesPositions = positionCandidates
+      .filter((pos) => estValide(pos, plateau))
+      .filter(
+        (pos) =>
+          !positionsAExplorer.some(
+            (otherPos) => pos.x === otherPos.x && pos.y === otherPos.y,
+          ),
+      )
+      .filter(
+        (pos) =>
+          !positionsExplorees.some(
+            (otherPos) => pos.x === otherPos.x && pos.y === otherPos.y,
+          ),
+      );
+    positionsAExplorer.push(...nouvellesPositions);
+  }
+
+  return nombreCasesAccessibles;
 }
