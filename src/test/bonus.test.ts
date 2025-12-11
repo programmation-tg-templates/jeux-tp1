@@ -1,6 +1,6 @@
 // Tests unitaires écrits par l'enseignant. Ne modifiez pas ce fichier.
 
-import { describe, expect, test } from "@jest/globals";
+import { describe, expect, test } from "vitest";
 import { compterCasesAccessibles, creerPlateau } from "../index";
 
 describe("Bonus : Compter cases accessibles", () => {

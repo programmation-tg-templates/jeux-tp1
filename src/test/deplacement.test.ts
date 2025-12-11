@@ -1,6 +1,6 @@
 // Tests unitaires écrits par l'enseignant. Ne modifiez pas ce fichier.
 
-import { beforeEach, describe, expect, test } from "@jest/globals";
+import { beforeEach, describe, expect, test } from "vitest";
 import type { PlateauDeJeu } from "../index";
 import { creerPlateau, deplacerPersonnage, estValide } from "../index";
 

@@ -1,6 +1,6 @@
 // Tests unitaires écrits par l'enseignant. Ne modifiez pas ce fichier.
 
-import { describe, expect, test } from "@jest/globals";
+import { describe, expect, test } from "vitest";
 import { calculerScore } from "../index";
 
 describe("Calcul du score", () => {
