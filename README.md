@@ -37,7 +37,7 @@ npm install
 Pour voir votre jeu en action dans le navigateur avec rechargement automatique :
 
 ```bash
-npm run dev
+npm start
 ```
 
 Puis ouvrez votre navigateur à l'adresse indiquée (généralement `http://localhost:5173`).
@@ -48,14 +48,6 @@ Pour exécuter les tests une seule fois :
 
 ```bash
 npm test
-```
-
-### Lancer les tests en mode watch
-
-Pour voir les résultats des tests en temps réel pendant que vous codez :
-
-```bash
-npm run watch
 ```
 
 Les résultats des tests s'affichent également dans l'interface web du jeu !
@@ -128,6 +120,7 @@ Toutes les fonctions sont dans le fichier [src/index.ts](src/index.ts). Elles so
 jeux-tp1-labyrinthe/
 ├── src/
 │   ├── index.ts              # Votre code ici (fonctions à implémenter)
+│   ├── app.ts                # Le code de l'applicatoin à **NE PAS MODIFIER**
 │   └── test/                 # Tests (NE PAS MODIFIER)
 │       ├── plateau.test.ts
 │       ├── conversion.test.ts
@@ -135,9 +128,8 @@ jeux-tp1-labyrinthe/
 │       ├── score.test.ts
 │       └── bonus.test.ts
 ├── public/                   # Interface graphique (fournie)
-│   ├── index.html
-│   ├── style.css
-│   └── app.js
+│   └── style.css
+├── index.html
 ├── package.json
 ├── tsconfig.json
 ├── vite.config.ts

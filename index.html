@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Labyrinthe - Escape Room</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>🚪 Escape Room - Labyrinthe</h1>
+        <p class="subtitle">Trouvez la sortie le plus rapidement possible !</p>
+      </header>
+
+      <div class="game-layout">
+        <aside class="sidebar">
+          <section class="stats">
+            <h2>Statistiques</h2>
+            <div class="stat-item">
+              <span class="stat-label">Temps :</span>
+              <span id="time-display" class="stat-value">0s</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Mouvements :</span>
+              <span id="move-count" class="stat-value">0</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Score :</span>
+              <span id="score-display" class="stat-value">0</span>
+            </div>
+          </section>
+
+          <section class="controls">
+            <h2>Contrôles</h2>
+            <div class="control-grid">
+              <button id="btn-up" class="control-btn" aria-label="Haut">
+                ↑
+              </button>
+              <button id="btn-left" class="control-btn" aria-label="Gauche">
+                ←
+              </button>
+              <button id="btn-down" class="control-btn" aria-label="Bas">
+                ↓
+              </button>
+              <button id="btn-right" class="control-btn" aria-label="Droite">
+                →
+              </button>
+            </div>
+            <p class="control-hint">
+              Utilisez les flèches du clavier ou les boutons
+            </p>
+          </section>
+
+          <section class="actions">
+            <button id="btn-reset" class="btn-secondary">🔄 Recommencer</button>
+            <button id="btn-generate" class="btn-secondary">
+              🎲 Nouveau labyrinthe
+            </button>
+          </section>
+        </aside>
+
+        <main class="game-area">
+          <div id="game-board" class="board">
+            <!-- Le plateau sera généré ici par JavaScript -->
+          </div>
+          <div id="game-message" class="message"></div>
+        </main>
+      </div>
+
+      <section class="test-progress">
+        <h2>Progression des tests</h2>
+        <div class="progress-bar-container">
+          <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
+        </div>
+        <div id="test-stats" class="test-stats">
+          <span id="tests-passed">0</span> /
+          <span id="tests-total">0</span> tests réussis
+        </div>
+        <div id="test-details" class="test-details"></div>
+      </section>
+    </div>
+
+    <script type="module" src="/src/app.ts"></script>
+  </body>
+</html>

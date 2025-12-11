@@ -9,7 +9,8 @@
   --color-text: #eaeaea;
   --color-text-dim: #a0a0a0;
 
-  --emoji-font: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+  --emoji-font:
+    "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
   --font-main: system-ui, -apple-system, sans-serif;
 
   --spacing-xs: 0.5rem;
@@ -250,8 +251,13 @@ h2 {
 }
 
 @keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.1); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
 }
 
 .message {
@@ -291,7 +297,11 @@ h2 {
 
 .progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, var(--color-secondary), var(--color-primary));
+  background: linear-gradient(
+    90deg,
+    var(--color-secondary),
+    var(--color-primary)
+  );
   transition: width 0.3s ease;
   display: flex;
   align-items: center;

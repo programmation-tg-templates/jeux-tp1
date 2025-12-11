@@ -1,20 +1,28 @@
+// ============================================================================
+// Jeu de Labyrinthe - Application principale
+//
+// !!! NE PAS MODIFIER CE FICHIER !!!
+// ============================================================================
+
 // Import des fonctions depuis le code étudiant
+import type { Direction, PlateauDeJeu, Position } from "./index.js";
+
 import {
   creerPlateau,
   positionVersIndice,
   deplacerPersonnage,
   calculerScore,
-} from '../src/index.js';
+} from "./index.js";
 
 // ============================================================================
 // État du jeu
 // ============================================================================
 
-let plateau = null;
-let positionPersonnage = null;
-let startTime = null;
+let plateau: PlateauDeJeu | undefined;
+let positionPersonnage: Position;
+let startTime: number;
 let moveCount = 0;
-let timerInterval = null;
+let timerInterval: number;
 let isGameWon = false;
 
 // ============================================================================
@@ -27,9 +35,14 @@ const CONFIG = {
   depart: { x: 0, y: 0 },
   cible: { x: 7, y: 5 },
   obstacles: [
-    { x: 2, y: 1 }, { x: 2, y: 2 }, { x: 2, y: 3 },
-    { x: 5, y: 2 }, { x: 5, y: 3 }, { x: 5, y: 4 },
-    { x: 3, y: 4 }, { x: 4, y: 4 },
+    { x: 2, y: 1 },
+    { x: 2, y: 2 },
+    { x: 2, y: 3 },
+    { x: 5, y: 2 },
+    { x: 5, y: 3 },
+    { x: 5, y: 4 },
+    { x: 3, y: 4 },
+    { x: 4, y: 4 },
   ],
 };
 
@@ -38,10 +51,10 @@ const CONFIG = {
 // ============================================================================
 
 const EMOJIS = {
-  libre: '⬜',
-  bloqué: '🧱',
-  personnage: '🚶',
-  cible: '🚪',
+  libre: "⬜",
+  bloqué: "🧱",
+  personnage: "🚶",
+  cible: "🚪",
 };
 
 // ============================================================================
@@ -54,13 +67,13 @@ function initGame() {
       CONFIG.largeur,
       CONFIG.hauteur,
       CONFIG.depart,
-      CONFIG.cible
+      CONFIG.cible,
     );
 
     // Placer les obstacles
-    CONFIG.obstacles.forEach(pos => {
+    CONFIG.obstacles.forEach((pos) => {
       const indice = positionVersIndice(pos, CONFIG.largeur);
-      plateau.cases[indice] = 'bloqué';
+      plateau!.cases[indice] = "bloqué";
     });
 
     positionPersonnage = { ...CONFIG.depart };
@@ -73,10 +86,10 @@ function initGame() {
 
     renderBoard();
     updateStats();
-    showMessage('');
-  } catch (error) {
-    showMessage(`Erreur lors de l'initialisation : ${error.message}`, 'error');
-    console.error('Erreur initialisation:', error);
+    showMessage("");
+  } catch (error: any) {
+    showMessage(`Erreur lors de l'initialisation : ${error.message}`, "error");
+    console.error("Erreur initialisation:", error);
   }
 }
 
@@ -85,16 +98,17 @@ function initGame() {
 // ============================================================================
 
 function renderBoard() {
-  const boardEl = document.getElementById('game-board');
+  const boardEl = document.getElementById("game-board");
   if (!plateau) {
-    boardEl.innerHTML = '<p class="error">Plateau non initialisé. Vérifiez votre fonction creerPlateau().</p>';
+    boardEl!.innerHTML =
+      '<p class="error">Plateau non initialisé. Vérifiez votre fonction creerPlateau().</p>';
     return;
   }
 
-  boardEl.style.gridTemplateColumns = `repeat(${plateau.largeur}, 50px)`;
-  boardEl.style.gridTemplateRows = `repeat(${plateau.hauteur}, 50px)`;
+  boardEl!.style.gridTemplateColumns = `repeat(${plateau.largeur}, 50px)`;
+  boardEl!.style.gridTemplateRows = `repeat(${plateau.hauteur}, 50px)`;
 
-  boardEl.innerHTML = '';
+  boardEl!.innerHTML = "";
 
   for (let y = 0; y < plateau.hauteur; y++) {
     for (let x = 0; x < plateau.largeur; x++) {
@@ -102,23 +116,27 @@ function renderBoard() {
       const indice = positionVersIndice(pos, plateau.largeur);
       const etatCase = plateau.cases[indice];
 
-      const cell = document.createElement('div');
+      const cell = document.createElement("div");
       cell.className = `cell ${etatCase}`;
 
       // Déterminer le contenu de la cellule
-      if (positionPersonnage && pos.x === positionPersonnage.x && pos.y === positionPersonnage.y) {
-        cell.classList.add('personnage');
+      if (
+        positionPersonnage &&
+        pos.x === positionPersonnage.x &&
+        pos.y === positionPersonnage.y
+      ) {
+        cell.classList.add("personnage");
         cell.textContent = EMOJIS.personnage;
       } else if (pos.x === plateau.cible.x && pos.y === plateau.cible.y) {
-        cell.classList.add('cible');
+        cell.classList.add("cible");
         cell.textContent = EMOJIS.cible;
-      } else if (etatCase === 'bloqué') {
+      } else if (etatCase === "bloqué") {
         cell.textContent = EMOJIS.bloqué;
       } else {
         cell.textContent = EMOJIS.libre;
       }
 
-      boardEl.appendChild(cell);
+      boardEl!.appendChild(cell);
     }
   }
 }
@@ -127,29 +145,37 @@ function renderBoard() {
 // Déplacement du personnage
 // ============================================================================
 
-function movePlayer(direction) {
+function movePlayer(direction: Direction) {
   if (isGameWon || !plateau) return;
 
   try {
-    const newPosition = deplacerPersonnage(positionPersonnage, direction, plateau);
+    const newPosition = deplacerPersonnage(
+      positionPersonnage,
+      direction,
+      plateau,
+    );
+
+    moveCount++;
+    updateStats();
 
     if (newPosition) {
       positionPersonnage = newPosition;
-      moveCount++;
       renderBoard();
-      updateStats();
 
       // Vérifier victoire
-      if (positionPersonnage.x === plateau.cible.x && positionPersonnage.y === plateau.cible.y) {
+      if (
+        positionPersonnage.x === plateau.cible.x &&
+        positionPersonnage.y === plateau.cible.y
+      ) {
         winGame();
       }
     } else {
-      showMessage('Déplacement impossible !', 'error');
-      setTimeout(() => showMessage(''), 1500);
+      showMessage("Déplacement impossible !", "error");
+      setTimeout(() => showMessage(""), 1500);
     }
-  } catch (error) {
-    showMessage(`Erreur : ${error.message}`, 'error');
-    console.error('Erreur déplacement:', error);
+  } catch (error: any) {
+    showMessage(`Erreur : ${error.message}`, "error");
+    console.error("Erreur déplacement:", error);
   }
 }
 
@@ -164,7 +190,10 @@ function winGame() {
   const timeElapsed = Math.floor((Date.now() - startTime) / 1000);
   const finalScore = calculerScore(moveCount, timeElapsed);
 
-  showMessage(`🎉 Victoire ! Score : ${finalScore} (${moveCount} mouvements, ${timeElapsed}s)`, 'success');
+  showMessage(
+    `🎉 Victoire ! Score : ${finalScore} (${moveCount} mouvements, ${timeElapsed}s)`,
+    "success",
+  );
 }
 
 // ============================================================================
@@ -172,7 +201,7 @@ function winGame() {
 // ============================================================================
 
 function updateStats() {
-  document.getElementById('move-count').textContent = moveCount;
+  document.getElementById("move-count")!.textContent = `${moveCount}`;
   updateScore();
 }
 
@@ -180,7 +209,7 @@ function updateTimer() {
   if (isGameWon || !startTime) return;
 
   const timeElapsed = Math.floor((Date.now() - startTime) / 1000);
-  document.getElementById('time-display').textContent = `${timeElapsed}s`;
+  document.getElementById("time-display")!.textContent = `${timeElapsed}s`;
   updateScore();
 }
 
@@ -190,9 +219,9 @@ function updateScore() {
   const timeElapsed = Math.floor((Date.now() - startTime) / 1000);
   try {
     const score = calculerScore(moveCount, timeElapsed);
-    document.getElementById('score-display').textContent = score;
+    document.getElementById("score-display")!.textContent = `${score}`;
   } catch (error) {
-    document.getElementById('score-display').textContent = '?';
+    document.getElementById("score-display")!.textContent = "?";
   }
 }
 
@@ -200,10 +229,10 @@ function updateScore() {
 // Messages
 // ============================================================================
 
-function showMessage(text, type = '') {
-  const messageEl = document.getElementById('game-message');
-  messageEl.textContent = text;
-  messageEl.className = `message ${type}`;
+function showMessage(text: string, type = "") {
+  const messageEl = document.getElementById("game-message");
+  messageEl!.textContent = text;
+  messageEl!.className = `message ${type}`;
 }
 
 // ============================================================================
@@ -213,23 +242,25 @@ function showMessage(text, type = '') {
 function generateRandomMaze() {
   const largeur = CONFIG.largeur;
   const hauteur = CONFIG.hauteur;
-  const obstacles = [];
+  const obstacles: Position[] = [];
 
   // Générer des obstacles aléatoires (environ 20% du plateau)
-  const targetObstacles = Math.floor((largeur * hauteur) * 0.2);
+  const targetObstacles = Math.floor(largeur * hauteur * 0.2);
 
   for (let i = 0; i < targetObstacles; i++) {
     const x = Math.floor(Math.random() * largeur);
     const y = Math.floor(Math.random() * hauteur);
 
     // Ne pas bloquer départ ni cible
-    if ((x === CONFIG.depart.x && y === CONFIG.depart.y) ||
-        (x === CONFIG.cible.x && y === CONFIG.cible.y)) {
+    if (
+      (x === CONFIG.depart.x && y === CONFIG.depart.y) ||
+      (x === CONFIG.cible.x && y === CONFIG.cible.y)
+    ) {
       continue;
     }
 
     // Éviter les doublons
-    if (!obstacles.some(obs => obs.x === x && obs.y === y)) {
+    if (!obstacles.some((obs) => obs.x === x && obs.y === y)) {
       obstacles.push({ x, y });
     }
   }
@@ -242,30 +273,40 @@ function generateRandomMaze() {
 // Gestion des événements
 // ============================================================================
 
-document.getElementById('btn-up')?.addEventListener('click', () => movePlayer('haut'));
-document.getElementById('btn-down')?.addEventListener('click', () => movePlayer('bas'));
-document.getElementById('btn-left')?.addEventListener('click', () => movePlayer('gauche'));
-document.getElementById('btn-right')?.addEventListener('click', () => movePlayer('droite'));
-document.getElementById('btn-reset')?.addEventListener('click', initGame);
-document.getElementById('btn-generate')?.addEventListener('click', generateRandomMaze);
+document
+  .getElementById("btn-up")
+  ?.addEventListener("click", () => movePlayer("haut"));
+document
+  .getElementById("btn-down")
+  ?.addEventListener("click", () => movePlayer("bas"));
+document
+  .getElementById("btn-left")
+  ?.addEventListener("click", () => movePlayer("gauche"));
+document
+  .getElementById("btn-right")
+  ?.addEventListener("click", () => movePlayer("droite"));
+document.getElementById("btn-reset")?.addEventListener("click", initGame);
+document
+  .getElementById("btn-generate")
+  ?.addEventListener("click", generateRandomMaze);
 
-document.addEventListener('keydown', (e) => {
+document.addEventListener("keydown", (e) => {
   switch (e.key) {
-    case 'ArrowUp':
+    case "ArrowUp":
       e.preventDefault();
-      movePlayer('haut');
+      movePlayer("haut");
       break;
-    case 'ArrowDown':
+    case "ArrowDown":
       e.preventDefault();
-      movePlayer('bas');
+      movePlayer("bas");
       break;
-    case 'ArrowLeft':
+    case "ArrowLeft":
       e.preventDefault();
-      movePlayer('gauche');
+      movePlayer("gauche");
       break;
-    case 'ArrowRight':
+    case "ArrowRight":
       e.preventDefault();
-      movePlayer('droite');
+      movePlayer("droite");
       break;
   }
 });
@@ -274,11 +315,9 @@ document.addEventListener('keydown', (e) => {
 // Polling des résultats de tests (JSON Vitest)
 // ============================================================================
 
-let previousTestResults = null;
-
 async function loadTestResults() {
   try {
-    const response = await fetch('/test-results.json');
+    const response = await fetch("/test-results.json");
     if (!response.ok) return;
 
     const data = await response.json();
@@ -288,40 +327,21 @@ async function loadTestResults() {
     let totalTests = 0;
     let passedTests = 0;
 
-    data.testResults.forEach(suite => {
-      suite.assertionResults.forEach(test => {
+    data.testResults.forEach((suite: any) => {
+      suite.assertionResults.forEach((test: any) => {
         totalTests++;
-        if (test.status === 'passed') passedTests++;
+        if (test.status === "passed") passedTests++;
       });
     });
 
     // Mettre à jour l'affichage
-    document.getElementById('tests-total').textContent = totalTests;
-    document.getElementById('tests-passed').textContent = passedTests;
+    document.getElementById("tests-total")!.textContent = `${totalTests}`;
+    document.getElementById("tests-passed")!.textContent = `${passedTests}`;
 
     const percentage = totalTests > 0 ? (passedTests / totalTests) * 100 : 0;
-    const progressBar = document.getElementById('progress-bar');
-    progressBar.style.width = `${percentage}%`;
-    progressBar.textContent = `${Math.round(percentage)}%`;
-
-    // Afficher les détails des tests
-    const testDetailsEl = document.getElementById('test-details');
-    testDetailsEl.innerHTML = '';
-
-    data.testResults.forEach(suite => {
-      suite.assertionResults.forEach(test => {
-        const testItem = document.createElement('div');
-        testItem.className = `test-item ${test.status}`;
-
-        const icon = test.status === 'passed' ? '✅' : test.status === 'failed' ? '❌' : '⏳';
-        const title = test.title;
-
-        testItem.innerHTML = `<span>${icon}</span><span>${title}</span>`;
-        testDetailsEl.appendChild(testItem);
-      });
-    });
-
-    previousTestResults = data;
+    const progressBar = document.getElementById("progress-bar");
+    progressBar!.style.width = `${percentage}%`;
+    progressBar!.textContent = `${Math.round(percentage)}%`;
   } catch (error) {
     // Silence - le fichier peut ne pas exister encore
   }

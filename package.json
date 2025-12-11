@@ -5,11 +5,13 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "test": "vitest run",
-    "watch": "vitest --reporter=verbose --reporter=json --outputFile=public/test-results.json"
+    "test": "vitest --run",
+    "watch": "vitest --watch --reporter=verbose --reporter=json --outputFile=public/test-results.json",
+    "start": "concurrently --kill-others --names srv,test --prefix-colors yellow.inverse,blue.inverse npm:dev npm:watch"
   },
   "devDependencies": {
     "@types/node": "^24.10.2",
+    "concurrently": "^9.2.1",
     "typescript": "^5.9.3",
     "vite": "^7.2.7",
     "vitest": "^4.0.15"
