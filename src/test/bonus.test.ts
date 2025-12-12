@@ -27,4 +27,12 @@ describe("Bonus : Compter cases accessibles", () => {
     const plateau = creerPlateau(5, 1);
     expect(compterCasesAccessibles({ x: 0, y: 0 }, plateau)).toBe(5);
   });
+
+  test("ne compte pas les cases libres inaccessibles", () => {
+    const plateau = creerPlateau(5, 4);
+    plateau.cases[1] = "bloqué";
+    plateau.cases[6] = "bloqué";
+    plateau.cases[10] = "bloqué";
+    expect(compterCasesAccessibles({ x: 4, y: 0 }, plateau)).toBe(15);
+  });
 });
