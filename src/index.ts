@@ -34,7 +34,7 @@ export function creerPlateau(largeur: number, hauteur: number): PlateauDeJeu {
  * @param position - Position à convertir
  * @param plateau - Plateau de jeu
  * @returns Indice correspondant dans le tableau 1D
- * @example positionVersIndice({x: 2, y: 3}, 5) // retourne 17
+ * @example positionVersIndice({x: 2, y: 3}, plateau) // retourne 17 quand le plateau a une largeur de 5
  */
 export function positionVersIndice(
   position: Position,
@@ -49,7 +49,7 @@ export function positionVersIndice(
  * @param indice - Indice dans le tableau 1D
  * @param plateau - Plateau de jeu
  * @returns Position correspondante
- * @example indiceVersPosition(17, 5) // retourne {x: 2, y: 3}
+ * @example indiceVersPosition(17, plateau) // retourne {x: 2, y: 3} quand le plateau a une largeur de 5
  */
 export function indiceVersPosition(
   indice: number,
