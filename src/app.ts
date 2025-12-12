@@ -18,7 +18,7 @@ import {
 // État du jeu
 // ============================================================================
 
-let plateau: PlateauDeJeu | undefined;
+let plateau: PlateauDeJeu;
 let positionPersonnage: Position;
 let startTime: number;
 let moveCount = 0;
@@ -52,7 +52,7 @@ const CONFIG = {
 
 const EMOJIS = {
   libre: "⬜",
-  bloqué: "🧱",
+  bloque: "🧱",
   personnage: "🚶",
   cible: "🚪",
 };
@@ -66,14 +66,12 @@ function initGame() {
     plateau = creerPlateau(
       CONFIG.largeur,
       CONFIG.hauteur,
-      CONFIG.depart,
-      CONFIG.cible,
     );
 
     // Placer les obstacles
     CONFIG.obstacles.forEach((pos) => {
       const indice = positionVersIndice(pos, CONFIG.largeur);
-      plateau!.cases[indice] = "bloqué";
+      plateau.cases[indice] = "bloqué";
     });
 
     positionPersonnage = { ...CONFIG.depart };
@@ -127,11 +125,11 @@ function renderBoard() {
       ) {
         cell.classList.add("personnage");
         cell.textContent = EMOJIS.personnage;
-      } else if (pos.x === plateau.cible.x && pos.y === plateau.cible.y) {
+      } else if (pos.x === CONFIG.cible.x && pos.y === CONFIG.cible.y) {
         cell.classList.add("cible");
         cell.textContent = EMOJIS.cible;
       } else if (etatCase === "bloqué") {
-        cell.textContent = EMOJIS.bloqué;
+        cell.textContent = EMOJIS.bloque;
       } else {
         cell.textContent = EMOJIS.libre;
       }
@@ -164,8 +162,8 @@ function movePlayer(direction: Direction) {
 
       // Vérifier victoire
       if (
-        positionPersonnage.x === plateau.cible.x &&
-        positionPersonnage.y === plateau.cible.y
+        positionPersonnage.x === CONFIG.cible.x &&
+        positionPersonnage.y === CONFIG.cible.y
       ) {
         winGame();
       }

@@ -11,8 +11,6 @@ export type PlateauDeJeu = {
   largeur: number;
   hauteur: number;
   cases: EtatCase[];
-  depart: Position;
-  cible: Position;
 };
 
 // ============================================================================
@@ -23,25 +21,19 @@ export type PlateauDeJeu = {
  * Crée un plateau de jeu avec un tableau 1D de cases libres.
  * @param largeur - Largeur du plateau
  * @param hauteur - Hauteur du plateau
- * @param depart - Position de départ du personnage
- * @param cible - Position cible à atteindre
  * @returns PlateauDeJeu initialisé avec toutes les cases libres
  * @example creerPlateau(5, 5, {x: 0, y: 0}, {x: 4, y: 4})
  */
 export function creerPlateau(
   largeur: number,
   hauteur: number,
-  depart: Position,
-  cible: Position,
 ): PlateauDeJeu {
   const nombreCases = largeur * hauteur;
   const cases: EtatCase[] = new Array(nombreCases).fill("libre");
   return {
     largeur,
     hauteur,
-    cases,
-    depart,
-    cible,
+    cases
   };
 }
 

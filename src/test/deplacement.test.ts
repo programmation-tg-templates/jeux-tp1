@@ -8,7 +8,7 @@ describe("Logique de déplacement", () => {
   let plateau: PlateauDeJeu;
 
   beforeEach(() => {
-    plateau = creerPlateau(5, 5, { x: 0, y: 0 }, { x: 4, y: 4 });
+    plateau = creerPlateau(5, 5);
   });
 
   describe("estValide", () => {

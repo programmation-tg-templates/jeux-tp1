@@ -40,7 +40,7 @@ Pour voir votre jeu en action dans le navigateur avec rechargement automatique :
 npm start
 ```
 
-Puis ouvrez votre navigateur à l'adresse indiquée (généralement `http://localhost:5173`).
+Puis ouvrez votre navigateur à l'adresse indiquée (généralement [`http://localhost:5173`](http://localhost:5173)).
 
 ### Lancer les tests
 
