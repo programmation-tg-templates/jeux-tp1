@@ -24,16 +24,13 @@ export type PlateauDeJeu = {
  * @returns PlateauDeJeu initialisé avec toutes les cases libres
  * @example creerPlateau(5, 5)
  */
-export function creerPlateau(
-  largeur: number,
-  hauteur: number,
-): PlateauDeJeu {
+export function creerPlateau(largeur: number, hauteur: number): PlateauDeJeu {
   const nombreCases = largeur * hauteur;
   const cases: EtatCase[] = new Array(nombreCases).fill("libre");
   return {
     largeur,
     hauteur,
-    cases
+    cases,
   };
 }
 
@@ -41,28 +38,31 @@ export function creerPlateau(
  * Convertit une position (x, y) en indice dans le tableau 1D.
  * Formule : indice = y * largeur + x
  * @param position - Position à convertir
- * @param largeur - Largeur du plateau
+ * @param plateau - Plateau de jeu
  * @returns Indice correspondant dans le tableau 1D
- * @example positionVersIndice({x: 2, y: 3}, 5) // retourne 17
+ * @example positionVersIndice({x: 2, y: 3}, plateau) // retourne 17 si le plateau a une largeur de 5
  */
 export function positionVersIndice(
   position: Position,
-  largeur: number,
+  plateau: PlateauDeJeu,
 ): number {
-  return position.y * largeur + position.x;
+  return position.y * plateau.largeur + position.x;
 }
 
 /**
  * Convertit un indice du tableau 1D en position (x, y).
  * Formules : x = indice % largeur, y = Math.floor(indice / largeur)
  * @param indice - Indice dans le tableau 1D
- * @param largeur - Largeur du plateau
+ * @param plateau - Plateau de jeu
  * @returns Position correspondante
- * @example indiceVersPosition(17, 5) // retourne {x: 2, y: 3}
+ * @example indiceVersPosition(17, plateau) // retourne {x: 2, y: 3} si le plateau a une largeur de 5
  */
-export function indiceVersPosition(indice: number, largeur: number): Position {
-  const x = indice % largeur;
-  const y = Math.floor(indice / largeur);
+export function indiceVersPosition(
+  indice: number,
+  plateau: PlateauDeJeu,
+): Position {
+  const x = indice % plateau.largeur;
+  const y = Math.floor(indice / plateau.largeur);
   return { x, y };
 }
 
@@ -71,7 +71,7 @@ export function indiceVersPosition(indice: number, largeur: number): Position {
 // ============================================================================
 
 function getCase(position: Position, plateau: PlateauDeJeu): EtatCase {
-  const indice = positionVersIndice(position, plateau.largeur);
+  const indice = positionVersIndice(position, plateau);
   return plateau.cases[indice];
 }
 

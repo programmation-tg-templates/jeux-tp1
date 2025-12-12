@@ -63,14 +63,11 @@ const EMOJIS = {
 
 function initGame() {
   try {
-    plateau = creerPlateau(
-      CONFIG.largeur,
-      CONFIG.hauteur,
-    );
+    plateau = creerPlateau(CONFIG.largeur, CONFIG.hauteur);
 
     // Placer les obstacles
     CONFIG.obstacles.forEach((pos) => {
-      const indice = positionVersIndice(pos, CONFIG.largeur);
+      const indice = positionVersIndice(pos, plateau);
       plateau.cases[indice] = "bloqué";
     });
 
@@ -111,7 +108,7 @@ function renderBoard() {
   for (let y = 0; y < plateau.hauteur; y++) {
     for (let x = 0; x < plateau.largeur; x++) {
       const pos = { x, y };
-      const indice = positionVersIndice(pos, plateau.largeur);
+      const indice = positionVersIndice(pos, plateau);
       const etatCase = plateau.cases[indice];
 
       const cell = document.createElement("div");
@@ -147,11 +144,8 @@ function movePlayer(direction: Direction) {
   if (isGameWon || !plateau) return;
 
   try {
-    const newPosition = deplacerPersonnage(
-      positionPersonnage,
-      direction,
-      plateau,
-    );
+    const copiePosition = { ...positionPersonnage };
+    const newPosition = deplacerPersonnage(copiePosition, direction, plateau);
 
     moveCount++;
     updateStats();
