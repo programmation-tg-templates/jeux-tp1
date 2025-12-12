@@ -22,7 +22,7 @@ export type PlateauDeJeu = {
  * @param largeur - Largeur du plateau
  * @param hauteur - Hauteur du plateau
  * @returns PlateauDeJeu initialisé avec toutes les cases libres
- * @example creerPlateau(5, 5, {x: 0, y: 0}, {x: 4, y: 4})
+ * @example creerPlateau(5, 5)
  */
 export function creerPlateau(
   largeur: number,
