@@ -24,10 +24,7 @@ export type PlateauDeJeu = {
  * @returns PlateauDeJeu initialisé avec toutes les cases libres
  * @example creerPlateau(5, 5)
  */
-export function creerPlateau(
-  largeur: number,
-  hauteur: number,
-): PlateauDeJeu {
+export function creerPlateau(largeur: number, hauteur: number): PlateauDeJeu {
   throw new Error("À implémenter");
 }
 
@@ -35,11 +32,14 @@ export function creerPlateau(
  * Convertit une position (x, y) en indice dans le tableau 1D.
  * Formule : indice = y * largeur + x
  * @param position - Position à convertir
- * @param largeur - Largeur du plateau
+ * @param plateau - Plateau de jeu
  * @returns Indice correspondant dans le tableau 1D
  * @example positionVersIndice({x: 2, y: 3}, 5) // retourne 17
  */
-export function positionVersIndice(position: Position, largeur: number): number {
+export function positionVersIndice(
+  position: Position,
+  plateau: PlateauDeJeu,
+): number {
   throw new Error("À implémenter");
 }
 
@@ -47,11 +47,14 @@ export function positionVersIndice(position: Position, largeur: number): number 
  * Convertit un indice du tableau 1D en position (x, y).
  * Formules : x = indice % largeur, y = Math.floor(indice / largeur)
  * @param indice - Indice dans le tableau 1D
- * @param largeur - Largeur du plateau
+ * @param plateau - Plateau de jeu
  * @returns Position correspondante
  * @example indiceVersPosition(17, 5) // retourne {x: 2, y: 3}
  */
-export function indiceVersPosition(indice: number, largeur: number): Position {
+export function indiceVersPosition(
+  indice: number,
+  plateau: PlateauDeJeu,
+): Position {
   throw new Error("À implémenter");
 }
 
@@ -79,7 +82,7 @@ export function estValide(position: Position, plateau: PlateauDeJeu): boolean {
 export function deplacerPersonnage(
   positionActuelle: Position,
   direction: Direction,
-  plateau: PlateauDeJeu
+  plateau: PlateauDeJeu,
 ): Position | null {
   throw new Error("À implémenter");
 }
@@ -95,7 +98,10 @@ export function deplacerPersonnage(
  * @param tempsSecondes - Temps écoulé en secondes
  * @returns Score calculé
  */
-export function calculerScore(nombreMouvements: number, tempsSecondes: number): number {
+export function calculerScore(
+  nombreMouvements: number,
+  tempsSecondes: number,
+): number {
   throw new Error("À implémenter");
 }
 
@@ -110,6 +116,9 @@ export function calculerScore(nombreMouvements: number, tempsSecondes: number): 
  * @param plateau - Plateau de jeu
  * @returns Nombre de cases accessibles
  */
-export function compterCasesAccessibles(depart: Position, plateau: PlateauDeJeu): number {
+export function compterCasesAccessibles(
+  depart: Position,
+  plateau: PlateauDeJeu,
+): number {
   throw new Error("À implémenter");
 }
